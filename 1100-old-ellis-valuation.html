@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0a4da7">
+<title>1100 Old Ellis — Valuation</title>
+<link href="https://fonts.googleapis.com/css2?family=Karla:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --charcoal: #24282b;
+    --slate: #5a6771;
+    --light-gray: #c1c5c8;
+    --bg-gray: #f5f6f7;
+    --blue: #0a4da7;
+    --light-blue: #afd1ff;
+    --very-light-blue: #e8f0fc;
+    --white: #ffffff;
+    --green: #1d9e75;
+    --red: #c43e3e;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Karla', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-gray);
+    color: var(--charcoal);
+    font-size: 16px;
+    line-height: 1.4;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 16px 14px 40px;
+  }
+  .header {
+    margin-bottom: 18px;
+  }
+  .header .subhead {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin: 0 0 4px;
+  }
+  .header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0 0 4px;
+    color: var(--charcoal);
+  }
+  .header .meta {
+    font-size: 13px;
+    color: var(--slate);
+    margin: 0;
+  }
+  .card {
+    background: var(--white);
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 12px;
+    border: 1px solid var(--light-gray);
+  }
+  .card-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin: 0 0 12px;
+  }
+  .input-row {
+    margin-bottom: 14px;
+  }
+  .input-row:last-child {
+    margin-bottom: 0;
+  }
+  .input-row label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--charcoal);
+    margin-bottom: 6px;
+  }
+  .input-row .sublabel {
+    font-size: 11px;
+    color: var(--slate);
+    font-weight: 400;
+    margin-left: 4px;
+  }
+  .input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .input-wrapper .prefix {
+    position: absolute;
+    left: 14px;
+    color: var(--slate);
+    font-size: 16px;
+    pointer-events: none;
+  }
+  .input-wrapper .suffix {
+    position: absolute;
+    right: 14px;
+    color: var(--slate);
+    font-size: 13px;
+    pointer-events: none;
+  }
+  input[type="number"] {
+    width: 100%;
+    height: 48px;
+    padding: 0 60px 0 28px;
+    font-size: 18px;
+    font-weight: 500;
+    font-family: inherit;
+    color: var(--charcoal);
+    background: var(--white);
+    border: 1.5px solid var(--light-gray);
+    border-radius: 8px;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  input[type="number"]:focus {
+    outline: none;
+    border-color: var(--blue);
+  }
+  input[type="number"].no-prefix {
+    padding-left: 14px;
+  }
+  /* Hide number spinners */
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] { -moz-appearance: textfield; }
+
+  /* Segmented control for Alusha scenarios */
+  .segmented {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0;
+    background: var(--bg-gray);
+    border: 1.5px solid var(--light-gray);
+    border-radius: 8px;
+    padding: 3px;
+    margin-bottom: 10px;
+  }
+  .segmented button {
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 4px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--slate);
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+  }
+  .segmented button.active {
+    background: var(--blue);
+    color: var(--white);
+    font-weight: 700;
+  }
+  .scenario-note {
+    font-size: 12px;
+    color: var(--slate);
+    margin: 0 0 10px;
+    line-height: 1.4;
+  }
+  .conditional-input {
+    display: none;
+  }
+  .conditional-input.active {
+    display: block;
+  }
+
+  /* NOI summary */
+  .noi-summary {
+    background: var(--very-light-blue);
+    border: 1.5px solid var(--light-blue);
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 12px;
+  }
+  .noi-summary .label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin: 0 0 4px;
+  }
+  .noi-summary .value {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--blue);
+    margin: 0;
+    letter-spacing: -0.5px;
+  }
+  .noi-summary .breakdown {
+    font-size: 12px;
+    color: var(--slate);
+    margin: 6px 0 0;
+  }
+
+  /* Value range cards */
+  .range-header {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin: 18px 0 10px;
+    padding-left: 2px;
+  }
+  .value-card {
+    background: var(--white);
+    border: 1px solid var(--light-gray);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .value-card.middle {
+    background: var(--very-light-blue);
+    border: 1.5px solid var(--blue);
+  }
+  .value-card .tier {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .value-card .tier-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--slate);
+  }
+  .value-card.middle .tier-label {
+    color: var(--blue);
+  }
+  .value-card .tier-cap {
+    font-size: 13px;
+    color: var(--charcoal);
+    font-weight: 500;
+  }
+  .value-card .value {
+    text-align: right;
+  }
+  .value-card .value-amount {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--charcoal);
+    letter-spacing: -0.3px;
+  }
+  .value-card.middle .value-amount {
+    color: var(--blue);
+  }
+  .value-card .value-psf {
+    font-size: 12px;
+    color: var(--slate);
+    margin-top: 2px;
+  }
+  .value-card .value-net {
+    font-size: 12px;
+    color: var(--red);
+    margin-top: 4px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
+  .value-card .value-net:empty {
+    display: none;
+  }
+
+  /* Opex breakdown under inputs */
+  .opex-breakdown {
+    margin-top: 12px;
+    padding: 10px 12px;
+    background: var(--bg-gray);
+    border-radius: 6px;
+    border-left: 3px solid var(--light-blue);
+  }
+  .opex-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: var(--slate);
+    padding: 2px 0;
+  }
+  .opex-line span:last-child {
+    font-variant-numeric: tabular-nums;
+    font-weight: 500;
+    color: var(--charcoal);
+  }
+  .opex-line.opex-total {
+    margin-top: 4px;
+    padding-top: 6px;
+    border-top: 1px solid var(--light-gray);
+    font-weight: 700;
+    color: var(--blue);
+    font-size: 13px;
+  }
+  .opex-line.opex-total span:last-child {
+    color: var(--blue);
+    font-weight: 700;
+  }
+  .opex-line.opex-gross {
+    margin-top: 4px;
+    padding-top: 6px;
+    border-top: 1px dashed var(--light-gray);
+    font-weight: 700;
+    color: var(--charcoal);
+    font-size: 13px;
+  }
+  .opex-line.opex-gross span:last-child {
+    color: var(--charcoal);
+    font-weight: 700;
+    font-size: 14px;
+  }
+
+  /* Leasing cost calculator */
+  .lc-calc {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--light-gray);
+  }
+  .lc-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin: 0 0 10px;
+  }
+  .lc-inputs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .lc-inputs .input-row {
+    margin-bottom: 0;
+  }
+  .lc-inputs input[type="number"] {
+    height: 44px;
+    font-size: 16px;
+  }
+  .lc-breakdown {
+    padding: 10px 12px;
+    background: var(--bg-gray);
+    border-radius: 6px;
+    border-left: 3px solid var(--light-blue);
+  }
+  .lc-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: var(--slate);
+    padding: 2px 0;
+  }
+  .lc-line span:last-child {
+    font-variant-numeric: tabular-nums;
+    font-weight: 500;
+    color: var(--charcoal);
+  }
+  .lc-line.lc-divider {
+    margin-top: 6px;
+    padding-top: 8px;
+    border-top: 1px solid var(--light-gray);
+  }
+  .lc-line.lc-total {
+    margin-top: 4px;
+    padding-top: 6px;
+    border-top: 1px dashed var(--light-gray);
+    font-weight: 700;
+    color: var(--charcoal);
+    font-size: 13px;
+  }
+  .lc-line.lc-total span:last-child {
+    color: var(--red);
+    font-weight: 700;
+    font-size: 14px;
+  }
+
+  /* Compact footer */
+  .footer-note {
+    font-size: 11px;
+    color: var(--slate);
+    text-align: center;
+    margin-top: 20px;
+    padding: 0 8px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <p class="subhead">Valuation Tool</p>
+    <h1>1100 Old Ellis</h1>
+    <p class="meta">28,750 SF · 3 suites · Forsyth County</p>
+  </div>
+
+  <!-- ALUSHA -->
+  <div class="card">
+    <p class="card-title">Boston Scientific · 12,888 SF</p>
+
+    <div class="segmented" id="alusha-toggle">
+      <button data-scenario="current" class="active">Current lease</button>
+      <button data-scenario="vacant">Vacant</button>
+      <button data-scenario="released">Re-leased NNN</button>
+    </div>
+    <p class="scenario-note" id="alusha-note">Gross lease expires Dec 2027. Currently $33,187/mo.</p>
+
+    <div class="conditional-input active" id="alusha-current-input">
+      <div class="input-row">
+        <label>Monthly rent (gross)</label>
+        <div class="input-wrapper">
+          <span class="prefix">$</span>
+          <input type="number" id="alusha-monthly" value="33187" step="100" inputmode="decimal">
+          <span class="suffix">/mo</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="conditional-input" id="alusha-released-input">
+      <div class="input-row">
+        <label>New NNN rate <span class="sublabel">at re-lease</span></label>
+        <div class="input-wrapper">
+          <span class="prefix">$</span>
+          <input type="number" id="alusha-new-psf" value="16" step="0.25" inputmode="decimal">
+          <span class="suffix">PSF NNN</span>
+        </div>
+      </div>
+      <div class="opex-breakdown">
+        <div class="opex-line"><span>Building OPEX (CAM)</span><span>$2.82</span></div>
+        <div class="opex-line"><span>HVAC</span><span>$0.30</span></div>
+        <div class="opex-line"><span>Utilities</span><span>$2.00</span></div>
+        <div class="opex-line"><span>Janitorial</span><span>$1.25</span></div>
+        <div class="opex-line opex-total"><span>Gross-up</span><span>+$6.37 PSF</span></div>
+        <div class="opex-line opex-gross"><span>Gross equivalent</span><span id="alusha-gross">$22.37 PSF</span></div>
+      </div>
+
+      <div class="lc-calc">
+        <p class="lc-title">Leasing Costs</p>
+        <div class="lc-inputs">
+          <div class="input-row">
+            <label>Lease term <span class="sublabel">years</span></label>
+            <div class="input-wrapper">
+              <input type="number" id="alusha-term" value="5" step="1" min="1" max="15" inputmode="numeric" class="no-prefix">
+              <span class="suffix">yrs</span>
+            </div>
+          </div>
+          <div class="input-row">
+            <label>TI allowance</label>
+            <div class="input-wrapper">
+              <span class="prefix">$</span>
+              <input type="number" id="alusha-ti" value="25" step="1" inputmode="decimal">
+              <span class="suffix">PSF</span>
+            </div>
+          </div>
+        </div>
+        <div class="lc-breakdown">
+          <div class="lc-line"><span>Escalation</span><span id="alusha-esc">3.00% annual</span></div>
+          <div class="lc-line"><span>Free rent</span><span id="alusha-free">5 mo gross</span></div>
+          <div class="lc-line"><span>Total occupancy</span><span id="alusha-total-term">65 mo</span></div>
+          <div class="lc-line lc-divider"><span>Gross TI</span><span id="alusha-ti-total">—</span></div>
+          <div class="lc-line"><span>Commission</span><span id="alusha-comm">—</span></div>
+          <div class="lc-line"><span>Free rent value</span><span id="alusha-free-val">—</span></div>
+          <div class="lc-line lc-total"><span>Total leasing costs</span><span id="alusha-lc-total">—</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VACANCY -->
+  <div class="card">
+    <p class="card-title">Vacant Suite · 8,244 SF</p>
+    <div class="input-row">
+      <label>New lease rate <span class="sublabel">NNN</span></label>
+      <div class="input-wrapper">
+        <span class="prefix">$</span>
+        <input type="number" id="vacant-psf" value="15" step="0.25" inputmode="decimal">
+        <span class="suffix">PSF NNN</span>
+      </div>
+    </div>
+    <div class="opex-breakdown">
+      <div class="opex-line"><span>Building OPEX (CAM)</span><span>$2.82</span></div>
+      <div class="opex-line"><span>HVAC</span><span>$0.30</span></div>
+      <div class="opex-line"><span>Utilities</span><span>$2.00</span></div>
+      <div class="opex-line"><span>Janitorial</span><span>$1.25</span></div>
+      <div class="opex-line opex-total"><span>Gross-up</span><span>+$6.37 PSF</span></div>
+      <div class="opex-line opex-gross"><span>Gross equivalent</span><span id="vacant-gross">$21.37 PSF</span></div>
+    </div>
+  </div>
+
+  <!-- OWNER LEASEBACK -->
+  <div class="card">
+    <p class="card-title">Owner Leaseback · 7,530 SF</p>
+    <div class="input-row">
+      <label>Leaseback rate <span class="sublabel">NNN</span></label>
+      <div class="input-wrapper">
+        <span class="prefix">$</span>
+        <input type="number" id="owner-psf" value="15" step="0.25" inputmode="decimal">
+        <span class="suffix">PSF NNN</span>
+      </div>
+    </div>
+    <div class="opex-breakdown">
+      <div class="opex-line"><span>Building OPEX (CAM)</span><span>$2.82</span></div>
+      <div class="opex-line"><span>HVAC</span><span>$0.30</span></div>
+      <div class="opex-line"><span>Utilities</span><span>$2.00</span></div>
+      <div class="opex-line"><span>Janitorial</span><span>$1.25</span></div>
+      <div class="opex-line opex-total"><span>Gross-up</span><span>+$6.37 PSF</span></div>
+      <div class="opex-line opex-gross"><span>Gross equivalent</span><span id="owner-gross">$21.37 PSF</span></div>
+    </div>
+  </div>
+
+  <!-- NOI -->
+  <div class="noi-summary">
+    <p class="label">Net Operating Income</p>
+    <p class="value" id="noi-value">$0</p>
+    <p class="breakdown" id="noi-breakdown"></p>
+  </div>
+
+  <!-- VALUE RANGE -->
+  <p class="range-header">Valuation Range</p>
+
+  <div class="value-card" id="value-high">
+    <div class="tier">
+      <span class="tier-label">High</span>
+      <span class="tier-cap">7.25% cap</span>
+    </div>
+    <div class="value">
+      <div class="value-amount" id="value-high-amount">—</div>
+      <div class="value-psf" id="value-high-psf">—</div>
+      <div class="value-net" id="value-high-net"></div>
+    </div>
+  </div>
+
+  <div class="value-card" id="value-highmid">
+    <div class="tier">
+      <span class="tier-label">High-Middle</span>
+      <span class="tier-cap">7.5625% cap</span>
+    </div>
+    <div class="value">
+      <div class="value-amount" id="value-highmid-amount">—</div>
+      <div class="value-psf" id="value-highmid-psf">—</div>
+      <div class="value-net" id="value-highmid-net"></div>
+    </div>
+  </div>
+
+  <div class="value-card middle" id="value-mid">
+    <div class="tier">
+      <span class="tier-label">Average</span>
+      <span class="tier-cap">7.875% cap</span>
+    </div>
+    <div class="value">
+      <div class="value-amount" id="value-mid-amount">—</div>
+      <div class="value-psf" id="value-mid-psf">—</div>
+      <div class="value-net" id="value-mid-net"></div>
+    </div>
+  </div>
+
+  <div class="value-card" id="value-lowmid">
+    <div class="tier">
+      <span class="tier-label">Low-Middle</span>
+      <span class="tier-cap">8.1875% cap</span>
+    </div>
+    <div class="value">
+      <div class="value-amount" id="value-lowmid-amount">—</div>
+      <div class="value-psf" id="value-lowmid-psf">—</div>
+      <div class="value-net" id="value-lowmid-net"></div>
+    </div>
+  </div>
+
+  <div class="value-card" id="value-low">
+    <div class="tier">
+      <span class="tier-label">Low</span>
+      <span class="tier-cap">8.50% cap</span>
+    </div>
+    <div class="value">
+      <div class="value-amount" id="value-low-amount">—</div>
+      <div class="value-psf" id="value-low-psf">—</div>
+      <div class="value-net" id="value-low-net"></div>
+    </div>
+  </div>
+
+  <p class="footer-note">Building OPEX $81,100/yr · Boston Scientific in-suite opex $3.55/SF · 3% mgmt fee applied</p>
+
+</div>
+
+<script>
+(function(){
+  // Constants
+  const BUILDING_SF = 28750;
+  const ALUSHA_SF = 12888;
+  const VACANT_SF = 8244;
+  const OWNER_SF = 7530;
+
+  const BUILDING_OPEX = 81100;           // CAM / shell — landlord absorbs Alusha's pro-rata if gross
+  const ALUSHA_INSUITE_PSF = 3.55;       // HVAC 0.30 + utilities 2.00 + janitorial 1.25
+  const MGMT_FEE_PCT = 3;
+
+  // Cap rates: low to high VALUE means low cap to high cap inverse
+  // User wants low/low-mid/avg/high-mid/high VALUES
+  // Range: 7.25% to 8.5% → high value = low cap, low value = high cap
+  // Evenly spaced in 0.3125% increments
+  const CAP_HIGH_VALUE = 7.25;    // produces highest value
+  const CAP_HIGHMID = 7.5625;
+  const CAP_AVG = 7.875;
+  const CAP_LOWMID = 8.1875;
+  const CAP_LOW_VALUE = 8.50;     // produces lowest value
+
+  let alushaScenario = 'current';
+
+  // Element refs
+  const $ = id => document.getElementById(id);
+  const fmtMoney = n => '$' + Math.round(n).toLocaleString();
+  const fmtMoneyM = n => {
+    if (n >= 1_000_000) return '$' + (n / 1_000_000).toFixed(2) + 'M';
+    return fmtMoney(n);
+  };
+
+  // Toggle handling
+  document.querySelectorAll('#alusha-toggle button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#alusha-toggle button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      alushaScenario = btn.dataset.scenario;
+      updateScenarioUI();
+      calc();
+    });
+  });
+
+  function updateScenarioUI() {
+    $('alusha-current-input').classList.toggle('active', alushaScenario === 'current');
+    $('alusha-released-input').classList.toggle('active', alushaScenario === 'released');
+    const note = $('alusha-note');
+    if (alushaScenario === 'current') {
+      note.textContent = 'Gross lease expires Dec 2027. Income net of in-suite opex.';
+    } else if (alushaScenario === 'vacant') {
+      note.textContent = 'No rental income. Landlord absorbs full in-suite opex.';
+    } else {
+      note.textContent = 'Assumes re-lease at new NNN rate post-2027. No in-suite opex burden.';
+    }
+  }
+
+  // Leasing cost calculator
+  function getEscalation(termYears) {
+    if (termYears >= 10) return 0.025;
+    if (termYears >= 7) return 0.0275;
+    return 0.03;
+  }
+
+  function calcLeasingCosts(nnnPSF, termYears, tiPSF, sf, grossUpPSF) {
+    if (termYears < 1) termYears = 1;
+    const grossPSF = nnnPSF + grossUpPSF;            // year 1 gross PSF
+    const annualEsc = getEscalation(termYears);
+    const freeMonths = termYears;                     // 1 month per year of term
+    const totalMonths = termYears * 12 + freeMonths;  // occupancy
+
+    // Build month-by-month contractual gross rent schedule.
+    // Escalation clock starts at month 1 regardless of free rent.
+    // Year n gross PSF = grossPSF * (1+esc)^(n-1)
+    // Year boundaries on the clock: months 1-12 = yr1, 13-24 = yr2, etc.
+    // Total occupancy = termYears*12 + freeMonths months.
+    let contractualGrossTotal = 0;
+    let freeRentValue = 0;
+    let month1GrossRent = 0;
+    let commissionableBase = 0; // months 2+, contractual gross, INCLUDING free months per clarification "rent that is free is not included" but commission base excludes free months too
+
+    for (let m = 1; m <= totalMonths; m++) {
+      const yearIndex = Math.floor((m - 1) / 12); // 0-based
+      const yearPSF = grossPSF * Math.pow(1 + annualEsc, yearIndex);
+      const monthlyRent = (yearPSF * sf) / 12;
+      const isFree = m <= freeMonths;
+
+      contractualGrossTotal += monthlyRent;
+      if (isFree) {
+        freeRentValue += monthlyRent;
+      } else {
+        // Commission: 1st paid month at 100%, remaining paid months at 6%
+        if (m === freeMonths + 1) {
+          month1GrossRent = monthlyRent;
+        } else {
+          commissionableBase += monthlyRent;
+        }
+      }
+    }
+
+    const commission = month1GrossRent + (commissionableBase * 0.06);
+    const grossTI = tiPSF * sf;
+    const totalLC = grossTI + commission + freeRentValue;
+
+    return {
+      annualEsc,
+      freeMonths,
+      totalMonths,
+      grossTI,
+      commission,
+      freeRentValue,
+      totalLC
+    };
+  }
+
+  function fmtMoneyShort(n) {
+    if (n >= 1_000_000) return '$' + (n / 1_000_000).toFixed(2) + 'M';
+    if (n >= 10_000) return '$' + Math.round(n / 1000) + 'K';
+    return '$' + Math.round(n).toLocaleString();
+  }
+
+  function updateAlushaLeasingCosts(alushaNewPSF, grossUpPSF) {
+    const term = parseInt($('alusha-term').value) || 1;
+    const tiPSF = parseFloat($('alusha-ti').value) || 0;
+    const lc = calcLeasingCosts(alushaNewPSF, term, tiPSF, ALUSHA_SF, grossUpPSF);
+
+    $('alusha-esc').textContent = (lc.annualEsc * 100).toFixed(2) + '% annual';
+    $('alusha-free').textContent = lc.freeMonths + ' mo gross';
+    $('alusha-total-term').textContent = lc.totalMonths + ' mo';
+    $('alusha-ti-total').textContent = fmtMoneyShort(lc.grossTI);
+    $('alusha-comm').textContent = fmtMoneyShort(lc.commission);
+    $('alusha-free-val').textContent = fmtMoneyShort(lc.freeRentValue);
+    $('alusha-lc-total').textContent = fmtMoneyShort(lc.totalLC);
+
+    return lc.totalLC;
+  }
+
+  function calc() {
+    const alushaMonthly = parseFloat($('alusha-monthly').value) || 0;
+    const alushaNewPSF = parseFloat($('alusha-new-psf').value) || 0;
+    const vacantPSF = parseFloat($('vacant-psf').value) || 0;
+    const ownerPSF = parseFloat($('owner-psf').value) || 0;
+
+    // Income side
+    let alushaIncome = 0;
+    let alushaInSuiteOpex = 0;
+    let alushaShareOfBuildingOpex = 0;
+    let scenarioLabel = '';
+
+    if (alushaScenario === 'current') {
+      alushaIncome = alushaMonthly * 12;
+      alushaInSuiteOpex = ALUSHA_INSUITE_PSF * ALUSHA_SF;       // gross — landlord pays
+      alushaShareOfBuildingOpex = BUILDING_OPEX * (ALUSHA_SF / BUILDING_SF); // gross — landlord pays
+      scenarioLabel = 'current gross lease';
+    } else if (alushaScenario === 'vacant') {
+      alushaIncome = 0;
+      alushaInSuiteOpex = ALUSHA_INSUITE_PSF * ALUSHA_SF;       // vacant — owner still on hook
+      alushaShareOfBuildingOpex = BUILDING_OPEX * (ALUSHA_SF / BUILDING_SF); // no reimbursement
+      scenarioLabel = 'Boston Scientific vacant';
+    } else {
+      // re-leased NNN: tenant pays in-suite costs + reimburses CAM
+      alushaIncome = alushaNewPSF * ALUSHA_SF;
+      alushaInSuiteOpex = 0;
+      alushaShareOfBuildingOpex = 0;
+      scenarioLabel = 're-leased NNN';
+    }
+
+    const vacantIncome = vacantPSF * VACANT_SF;
+    const ownerIncome = ownerPSF * OWNER_SF;
+
+    // Update gross-equivalent displays (NNN rate + $6.37 gross-up)
+    const GROSS_UP = ALUSHA_INSUITE_PSF + (BUILDING_OPEX / BUILDING_SF);
+    $('vacant-gross').textContent = '$' + (vacantPSF + GROSS_UP).toFixed(2) + ' PSF';
+    $('owner-gross').textContent = '$' + (ownerPSF + GROSS_UP).toFixed(2) + ' PSF';
+    if ($('alusha-gross')) {
+      $('alusha-gross').textContent = '$' + (alushaNewPSF + GROSS_UP).toFixed(2) + ' PSF';
+    }
+
+    // Update Alusha leasing cost calculator (only matters in re-leased scenario)
+    let leasingCosts = 0;
+    if (alushaScenario === 'released') {
+      leasingCosts = updateAlushaLeasingCosts(alushaNewPSF, GROSS_UP);
+    }
+
+    // Building OPEX share from NNN tenants is reimbursed (wash). Owner share only matters
+    // if vacant (always treated as filled here since owner-occupied/leaseback) — so only
+    // the Alusha portion can hit the landlord, handled above.
+    const totalIncome = alushaIncome + vacantIncome + ownerIncome;
+    const totalExpenses = alushaInSuiteOpex + alushaShareOfBuildingOpex;
+    const egi = totalIncome; // assume 0% vacancy at stabilized close
+    const mgmtFee = egi * (MGMT_FEE_PCT / 100);
+    const noi = egi - totalExpenses - mgmtFee;
+
+    $('noi-value').textContent = fmtMoney(noi);
+
+    // Breakdown line
+    let bd = `Income ${fmtMoney(totalIncome)} − Exp ${fmtMoney(totalExpenses + mgmtFee)}`;
+    $('noi-breakdown').textContent = bd + ' · ' + scenarioLabel;
+
+    // Value tiers
+    const tiers = [
+      { id: 'high',    cap: CAP_HIGH_VALUE },
+      { id: 'highmid', cap: CAP_HIGHMID },
+      { id: 'mid',     cap: CAP_AVG },
+      { id: 'lowmid',  cap: CAP_LOWMID },
+      { id: 'low',     cap: CAP_LOW_VALUE }
+    ];
+
+    tiers.forEach(t => {
+      const value = noi > 0 ? noi / (t.cap / 100) : 0;
+      const netValue = value - leasingCosts;
+      const psf = value / BUILDING_SF;
+      $('value-' + t.id + '-amount').textContent = noi > 0 ? fmtMoneyM(value) : '$0';
+      $('value-' + t.id + '-psf').textContent = noi > 0 ? '$' + Math.round(psf) + '/SF' : '—';
+      const netEl = $('value-' + t.id + '-net');
+      if (leasingCosts > 0 && noi > 0) {
+        netEl.textContent = 'Net: ' + fmtMoneyM(netValue);
+      } else {
+        netEl.textContent = '';
+      }
+    });
+  }
+
+  // Wire inputs
+  ['alusha-monthly','alusha-new-psf','vacant-psf','owner-psf','alusha-term','alusha-ti'].forEach(id => {
+    $(id).addEventListener('input', calc);
+  });
+
+  updateScenarioUI();
+  calc();
+})();
+</script>
+</body>
+</html>
